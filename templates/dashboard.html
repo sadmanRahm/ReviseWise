@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .dash-card {
+        border-radius: 16px;
+        padding: 22px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+</style>
+
+<div class="container my-4">
+
+    <h1 class="text-center mb-3">Your Dashboard</h1>
+
+    {% if session.get('learning_style') %}
+    <div class="alert alert-info text-center">
+        <strong>Your learning style:</strong> {{ session.get('learning_style') }}
+    </div>
+    {% endif %}
+
+    <div class="row mb-4 text-center">
+        <div class="col-md-4 mb-3">
+            <div class="dash-card" style="background:#4CAF50;">
+                <p class="fs-5">{{ completed_count }} Completed</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="dash-card" style="background:#6c757d;">
+                <p class="fs-5">{{ not_started_count }} Not Completed</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="dash-card" style="background:var(--primary);">
+                <p class="fs-5">{{ overall_completion }}% Overall</p>
+            </div>
+        </div>
+    </div>
+
+    {% for subject, items in progress_by_subject.items() %}
+    <div class="card p-4 mb-4">
+        <h4 class="mb-3">{{ subject }}</h4>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Resource</th>
+                        <th>Type</th>
+                        <th>Style</th>
+                        <th>Source</th>
+                        <th>Access</th>
+                        <th>Status</th>
+                        {% if session.get('is_teacher') == 1 %}
+                        <th>Manage</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prog in items %}
+                    <tr {% if prog.resource.StyleMatch == session.get('learning_style') %}class="table-success"{% endif %}>
+                        <td><strong>{{ prog.resource.Title }}</strong></td>
+                        <td>{{ prog.resource.Type }}</td>
+                        <td>{{ prog.resource.StyleMatch }}</td>
+                        <td>
+                            {% if prog.resource.FilePath %}
+                                <span class="badge bg-primary">Teacher uploaded</span>
+                            {% else %}
+                                <span class="badge bg-info text-dark">Preset</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if prog.resource.FilePath %}
+                                <a href="{{ url_for('static', filename='uploads/' ~ prog.resource.FilePath) }}" target="_blank" class="btn btn-sm btn-outline-secondary mb-1">Open file</a>
+                            {% endif %}
+                            {% if prog.resource.VideoLink %}
+                                <a href="{{ prog.resource.VideoLink }}" target="_blank" class="btn btn-sm btn-outline-primary mb-1">Open link</a>
+                            {% endif %}
+                            {% if not prog.resource.FilePath and not prog.resource.VideoLink %}
+                                <span class="text-muted small">None</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if prog.CompletionPercent == 100 %}
+                                <span class="badge bg-success">Completed</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not done</span>
+                                <form action="{{ url_for('complete_resource') }}" method="post" class="mt-1">
+                                    <input type="hidden" name="resource_id" value="{{ prog.resource.ResourceID }}">
+                                    <button class="btn btn-sm btn-success">Mark done</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                        {% if session.get('is_teacher') == 1 %}
+                        <td>
+                            <form action="{{ url_for('delete_resource', resource_id=prog.resource.ResourceID) }}" method="post" onsubmit="return confirm('Delete this resource?');">
+                                <button class="btn btn-sm btn-danger">🗑 Delete</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

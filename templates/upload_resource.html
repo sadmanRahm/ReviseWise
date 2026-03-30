@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4" style="max-width: 650px;">
+    <h2>Upload a New Resource</h2>
+
+    <form method="post" class="mt-3" enctype="multipart/form-data">
+
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" required>
+
+        <label class="form-label mt-3">Resource Type</label>
+        <select name="type" class="form-select" required>
+            <option>Video</option>
+            <option>Interactive</option>
+            <option>Notes</option>
+        </select>
+
+        <label class="form-label mt-3">Learning Style</label>
+        <select name="style" class="form-select" required>
+            <option>Visual</option>
+            <option>Auditory</option>
+            <option>Read/Write</option>
+            <option>Kinaesthetic</option>
+        </select>
+
+        <label class="form-label mt-3">Subject</label>
+        <select name="subject" class="form-select" required>
+            <option>Maths</option>
+            <option>Biology</option>
+            <option>English</option>
+            <option>History</option>
+            <option>Geography</option>
+            <option>Languages</option>
+        </select>
+
+        <hr class="my-4">
+
+        <label class="form-label">Video link (optional)</label>
+        <input type="url" name="video_link" class="form-control" placeholder="https://...">
+
+        <label class="form-label mt-3">Upload file (optional)</label>
+        <input type="file" name="video_file" class="form-control">
+
+        <button class="btn btn-primary w-100 mt-4">Upload Resource</button>
+    </form>
+
+    <a href="/dashboard" class="btn btn-secondary w-100 mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

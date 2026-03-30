@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <h2 class="mb-2">Recommended Resources</h2>
+        <form method="get" class="d-flex align-items-center gap-2">
+            <label class="form-label mb-0"><strong>Subject:</strong></label>
+            <select name="subject" class="form-select" onchange="this.form.submit()">
+                {% for sub in subjects %}
+                    <option value="{{ sub }}" {% if sub == selected_subject %}selected{% endif %}>{{ sub }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if resources|length == 0 %}
+        <div class="alert alert-info text-center">No resources found for this subject and learning style.</div>
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for res in resources %}
+        <div class="col">
+            <div class="card p-3 h-100">
+                <h5 class="mb-2">{{ res.Title }}</h5>
+                <p class="small mb-3">
+                    <strong>Subject:</strong> {{ res.Subject }}<br>
+                    <strong>Style:</strong> {{ res.StyleMatch }}<br>
+                    <strong>Type:</strong> {{ res.Type }}
+                </p>
+                {% if res.VideoLink %}
+                    <a href="{{ res.VideoLink }}" target="_blank" class="btn btn-outline-primary btn-sm w-100 mb-2">Open resource</a>
+                {% endif %}
+                {% if res.FilePath %}
+                    <a href="{{ url_for('static', filename='uploads/' ~ res.FilePath.split('/')[-1]) }}" target="_blank" class="btn btn-outline-secondary btn-sm w-100 mb-2">Open file</a>
+                {% endif %}
+                <form action="{{ url_for('complete_resource') }}" method="post" class="mt-auto">
+                    <input type="hidden" name="resource_id" value="{{ res.ResourceID }}">
+                    <button class="btn btn-success btn-sm w-100">✔ Mark as completed</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+</div>
+{% endblock %}

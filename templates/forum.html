@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .post-bubble {
+        background: white;
+        padding: 14px 18px;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        margin-bottom: 12px;
+        max-width: 650px;
+    }
+    .timestamp { font-size: 0.85rem; color: #777; }
+</style>
+
+<div class="container my-4">
+
+    <h2 class="mb-3">Community Forum</h2>
+
+    {% if message %}
+    <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+
+    <form method="post" class="mb-4">
+        <textarea class="form-control" name="content" rows="3" placeholder="Share your thoughts..." required></textarea>
+        <button class="btn btn-primary mt-2">Post</button>
+    </form>
+
+    <h4>Recent Posts</h4>
+
+    <div>
+        {% for p in posts %}
+        <div class="post-bubble">
+            <p class="mb-1">{{ p.Content }}</p>
+            <div class="timestamp">{{ p.Timestamp }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <a href="/dashboard" class="btn btn-secondary mt-4">Back to Dashboard</a>
+
+</div>
+{% endblock %}

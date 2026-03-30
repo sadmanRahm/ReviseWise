@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .medal { font-size: 1.5rem; }
+    .leaderboard-card {
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        padding: 20px;
+    }
+</style>
+
+<div class="container my-4">
+
+    <h1 class="text-center mb-4">Leaderboard</h1>
+
+    <div class="leaderboard-card">
+        <table class="table text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Learning Style</th>
+                    <th>Completed</th>
+                    <th>Overall %</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        {% if loop.index == 1 %}
+                            <span class="medal">🥇</span>
+                        {% elif loop.index == 2 %}
+                            <span class="medal">🥈</span>
+                        {% elif loop.index == 3 %}
+                            <span class="medal">🥉</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ loop.index }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.style }}</td>
+                    <td>{{ user.completed }}</td>
+                    <td><strong>{{ user.overall }}%</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/dashboard" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+
+</div>
+{% endblock %}

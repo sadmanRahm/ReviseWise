@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4" style="max-width: 700px;">
+
+    <h2 class="mb-4 text-center">Learning Style Quiz</h2>
+
+    <form method="post">
+
+        {% for q in questions %}
+        <div class="card p-3 mb-3">
+
+            <p><strong>{{ loop.index }}. {{ q.QuestionText }}</strong></p>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       name="q{{ q.QuestionID }}" value="{{ q.StyleA }}" required>
+                <label class="form-check-label">{{ q.OptionA }}</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       name="q{{ q.QuestionID }}" value="{{ q.StyleB }}">
+                <label class="form-check-label">{{ q.OptionB }}</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       name="q{{ q.QuestionID }}" value="{{ q.StyleC }}">
+                <label class="form-check-label">{{ q.OptionC }}</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       name="q{{ q.QuestionID }}" value="{{ q.StyleD }}">
+                <label class="form-check-label">{{ q.OptionD }}</label>
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <button class="btn btn-primary w-100 mt-3">
+            Submit Quiz
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+
